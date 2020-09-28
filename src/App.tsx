@@ -1,7 +1,14 @@
 import React from 'react';
+import { ThemeProvider } from 'styled-components';
+import Routes from './routes';
+import GlobalStyles from './styles/globals';
+import theme from './styles/theme';
 
-function App() {
-  return <h1>Hello Aurora Events</h1>;
-}
+const App = () => (
+  <ThemeProvider theme={theme}>
+    <Routes />
+    <GlobalStyles />
+  </ThemeProvider>
+);
 
 export default App;
