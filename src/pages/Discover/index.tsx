@@ -1,17 +1,18 @@
 import React from 'react';
-import { BiLike, BiDislike } from 'react-icons/bi';
+import { useHistory } from 'react-router-dom';
 import Button from '../../components/Button';
+import LikeDislikeButtons from '../../components/LikeDislikeButtons';
 
 import Navbar from '../../components/Navbar';
-import {
-  Container,
-  CardContainer,
-  Card,
-  CardContent,
-  LikeButton,
-} from './styles';
+import { Container, CardContainer, Card, CardContent } from './styles';
 
 const Discover: React.FC = () => {
+  const history = useHistory();
+
+  function handleNavigateToDetails(id: string | number) {
+    history.push(`/discover/${id}`);
+  }
+
   return (
     <>
       <Navbar />
@@ -25,21 +26,16 @@ const Discover: React.FC = () => {
               />
 
               <CardContent>
-                <h1>ReactJS Confehence</h1>
+                <h1>ReactJS Conference</h1>
                 <p>
                   Organized by <span>John Doe</span>
                 </p>
 
-                <LikeButton className="active">
-                  <BiLike size={20} />
-                  22
-                </LikeButton>
+                <LikeDislikeButtons />
 
-                <LikeButton>
-                  <BiDislike size={20} />0
-                </LikeButton>
-
-                <Button block>Know more</Button>
+                <Button block onClick={() => handleNavigateToDetails(index)}>
+                  Know more
+                </Button>
               </CardContent>
             </Card>
           ))}

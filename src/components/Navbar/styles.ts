@@ -13,7 +13,7 @@ export const Content = styled.div`
   justify-content: space-between;
   align-items: center;
 
-  img {
+  > img {
     width: 80px;
   }
 
@@ -56,6 +56,8 @@ export const Content = styled.div`
     img {
       margin-left: 16px;
       width: 32px;
+      height: 32px;
+      object-fit: cover;
       border-radius: 50%;
     }
   }

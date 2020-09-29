@@ -22,8 +22,8 @@ const Navbar: React.FC = () => {
         <div>
           <p>John Doe</p>
           <img
-            src="https://github.com/marcosribeirodacunha.png"
-            alt="Marcos Ribeiro"
+            src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=635&q=80"
+            alt="John Doe"
           />
         </div>
       </Content>
