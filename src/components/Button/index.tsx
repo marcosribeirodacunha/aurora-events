@@ -10,11 +10,12 @@ interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 const Button: React.FC<IProps> = ({
   variant = 'primary',
   block = false,
+  type = 'button',
   children,
   ...rest
 }) => {
   return (
-    <Container block={block} type="button" className={variant} {...rest}>
+    <Container block={block} type={type} className={variant} {...rest}>
       {children}
     </Container>
   );

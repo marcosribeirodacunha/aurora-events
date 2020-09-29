@@ -1,7 +1,10 @@
-import React, { FormEvent } from 'react';
-import { BiLogIn } from 'react-icons/bi';
-import { MdMailOutline, MdLockOutline } from 'react-icons/md';
-import { useHistory } from 'react-router-dom';
+import React from 'react';
+import {
+  MdPersonOutline,
+  MdMailOutline,
+  MdLockOutline,
+  MdArrowBack,
+} from 'react-icons/md';
 
 import logo from '../../assets/logo.svg';
 import Button from '../../components/Button';
@@ -10,24 +13,20 @@ import Link from '../../components/Link';
 
 import { Container, Content, Background } from './styles';
 
-const SignIn: React.FC = () => {
-  const history = useHistory();
-
-  function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    history.push('/discover');
-  }
-
+const SignUp: React.FC = () => {
   return (
     <Container>
+      <Background />
+
       <Content>
         <img src={logo} alt="Aurora Events" />
 
-        <form onSubmit={handleSubmit}>
+        <form>
           <h1>
-            Welcome back. <span>Sign In</span>
+            <span>Sign Up</span> to continue
           </h1>
 
+          <Input icon={MdPersonOutline} name="name" placeholder="Name" />
           <Input icon={MdMailOutline} name="email" placeholder="E-mail" />
           <Input
             icon={MdLockOutline}
@@ -37,20 +36,16 @@ const SignIn: React.FC = () => {
           />
 
           <Button type="submit" block>
-            Sign In
+            Sign Up
           </Button>
-
-          <Link to="forgot">Forgot your password?</Link>
         </form>
 
-        <Link to="sign-up" variant="secondary" icon={BiLogIn}>
-          Sign Up
+        <Link to="sign-in" icon={MdArrowBack}>
+          Back to sign in
         </Link>
       </Content>
-
-      <Background />
     </Container>
   );
 };
 
-export default SignIn;
+export default SignUp;

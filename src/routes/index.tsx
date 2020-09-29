@@ -1,6 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+
 import SignIn from '../pages/SignIn';
+import SignUp from '../pages/SignUp';
+import Discover from '../pages/Discover';
 
 const routes: React.FC = () => {
   return (
@@ -8,7 +11,8 @@ const routes: React.FC = () => {
       <Switch>
         <Redirect exact from="/" to="/sign-in" />
         <Route path="/sign-in" component={SignIn} />
-        {/* <Route path="discover" component={Discover} /> */}
+        <Route path="/sign-up" component={SignUp} />
+        <Route path="/discover" component={Discover} />
       </Switch>
     </BrowserRouter>
   );
