@@ -5,6 +5,7 @@ export const Container = styled.div`
   border-radius: ${props => props.theme.radius};
   height: 250px;
   border: 2px solid ${props => props.theme.colors.card};
+  overflow: hidden;
   transition: border-color 0.3s ease;
 
   display: flex;
@@ -20,7 +21,6 @@ export const Container = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: ${props => props.theme.radius};
   }
 
   p {

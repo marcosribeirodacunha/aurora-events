@@ -8,7 +8,6 @@ export const Container = styled.div`
     width: 100%;
     object-fit: cover;
     height: max(40vh, 450px);
-    /* max-height: 70%; */
   }
 
   section {
@@ -43,6 +42,8 @@ export const Organizer = styled.div`
 
   img {
     width: 48px;
+    height: 48px;
+    object-fit: cover;
     border-radius: 50%;
     margin-right: 16px;
   }
