@@ -42,7 +42,7 @@ export const Content = styled.div<IContentProps>`
   } ;
 `;
 
-const scaleCard = keyframes`
+const fadeAndTranslate = keyframes`
   from {
     opacity: 0;
     transform: translateY(-100%);
@@ -65,7 +65,7 @@ export const Card = styled.div`
   box-shadow: 0 0 40px 0
     ${props => transparentize(0.8, props.theme.colors.tertiary)};
 
-  animation: ${scaleCard} 0.3s ease;
+  animation: ${fadeAndTranslate} 0.3s ease;
 
   > button:first-of-type {
     position: absolute;

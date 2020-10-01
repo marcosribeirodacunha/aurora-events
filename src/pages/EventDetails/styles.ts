@@ -1,14 +1,9 @@
+import { transparentize } from 'polished';
 import styled from 'styled-components';
 
 export const Container = styled.div`
   min-height: calc(100% - 80px);
   margin-bottom: 100px;
-
-  > img {
-    width: 100%;
-    object-fit: cover;
-    height: max(40vh, 450px);
-  }
 
   section {
     width: 100%;
@@ -19,10 +14,10 @@ export const Container = styled.div`
     h1 {
       font-size: ${props => props.theme.font.title1};
       color: ${props => props.theme.colors.secondary};
-      margin-bottom: 20px;
+      margin: 20px 0;
     }
 
-    > div:first-of-type {
+    > div.location {
       display: flex;
       align-items: center;
       color: ${props => props.theme.colors.textSecondary};
@@ -31,6 +26,45 @@ export const Container = styled.div`
       svg {
         margin-right: 8px;
       }
+    }
+  }
+`;
+
+export const OrganizerButtons = styled.div`
+  button {
+    margin-top: 0;
+
+    & + button {
+      margin-left: 8px;
+    }
+  }
+`;
+
+export const Photo = styled.div`
+  position: relative;
+
+  img {
+    width: 100%;
+    object-fit: cover;
+    height: max(40vh, 450px);
+  }
+
+  button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 8px;
+    width: 100%;
+
+    border: none;
+    cursor: pointer;
+    background: transparent;
+    color: transparent;
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+    &:hover {
+      background: ${props => transparentize(0.3, props.theme.colors.card)};
+      color: ${props => props.theme.colors.primary};
     }
   }
 `;

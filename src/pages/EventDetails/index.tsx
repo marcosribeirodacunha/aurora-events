@@ -1,21 +1,58 @@
-import React from 'react';
-import { BiMap } from 'react-icons/bi';
-import LikeDislikeButtons from '../../components/LikeDislikeButtons';
-import Navbar from '../../components/Navbar';
+import React, { useCallback, useRef } from 'react';
+import { BiMap, BiPencil, BiTrashAlt } from 'react-icons/bi';
 
-import { Container, Organizer } from './styles';
+import Navbar from '../../components/Navbar';
+import LikeDislikeButtons from '../../components/LikeDislikeButtons';
+import { IModalHandles } from '../../components/Modal';
+import DeleteModal from '../../components/Modal/DeleteModal';
+import PhotoModal from '../../components/Modal/PhotoModal';
+import UpdateModal from '../../components/Modal/UpdateModal';
+
+import { Container, Photo, OrganizerButtons, Organizer } from './styles';
+import Button from '../../components/Button';
 
 const MyEvents: React.FC = () => {
+  const photoModalRef = useRef<IModalHandles>(null);
+  const updateModalRef = useRef<IModalHandles>(null);
+  const deleteModalRef = useRef<IModalHandles>(null);
+
+  const handleOpenModal = useCallback(
+    (modalRef: React.RefObject<IModalHandles>) => modalRef.current?.openModal(),
+    []
+  );
+
   return (
     <>
       <Navbar />
       <Container>
-        <img
-          src="https://railsware.com/blog/wp-content/uploads/2019/07/Why-we-use-ReactJS-for-our-projects-facebook.png"
-          alt="ReactJS Banner"
-        />
+        <Photo>
+          <img
+            src="https://railsware.com/blog/wp-content/uploads/2019/07/Why-we-use-ReactJS-for-our-projects-facebook.png"
+            alt="ReactJS Banner"
+          />
+
+          <button type="button" onClick={() => handleOpenModal(photoModalRef)}>
+            <BiPencil size={56} />
+          </button>
+        </Photo>
 
         <section>
+          <OrganizerButtons>
+            <Button
+              fab
+              icon={BiPencil}
+              variant="primary-ghost"
+              onClick={() => handleOpenModal(updateModalRef)}
+            />
+
+            <Button
+              fab
+              icon={BiTrashAlt}
+              variant="inverse-ghost"
+              onClick={() => handleOpenModal(deleteModalRef)}
+            />
+          </OrganizerButtons>
+
           <h1>ReactJS Conference</h1>
 
           <p>
@@ -24,7 +61,7 @@ const MyEvents: React.FC = () => {
             magni corrupti sed.
           </p>
 
-          <div>
+          <div className="location">
             <BiMap size={20} />
             <p>Avenue Somewhere, 213, São Paulo, SP</p>
           </div>
@@ -46,6 +83,9 @@ const MyEvents: React.FC = () => {
           </Organizer>
         </section>
       </Container>
+      <PhotoModal modalRef={photoModalRef} />
+      <UpdateModal modalRef={updateModalRef} />
+      <DeleteModal modalRef={deleteModalRef} />
     </>
   );
 };
