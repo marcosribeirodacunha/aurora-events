@@ -1,7 +1,11 @@
 import { shade } from 'polished';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-export const Container = styled.button`
+interface IProps {
+  disableUserInteraction: boolean;
+}
+
+export const Container = styled.button<IProps>`
   background: transparent;
   color: ${props => props.theme.colors.textSecondary};
   border: none;
@@ -29,4 +33,10 @@ export const Container = styled.button`
   & + & {
     margin-left: 40px;
   }
+
+  ${props =>
+    props.disableUserInteraction &&
+    css`
+      pointer-events: none;
+    `};
 `;

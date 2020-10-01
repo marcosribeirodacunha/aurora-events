@@ -6,11 +6,17 @@ export default createGlobalStyle`
     font-size: 16px;
   }
 
+
   * {
     margin: 0;
     padding: 0;
     outline: 0;
     box-sizing: border-box;
+  }
+
+  ::selection {
+    color: ${props => props.theme.colors.text};
+    background: ${props => props.theme.colors.tertiary};
   }
 
   html, body, #root {

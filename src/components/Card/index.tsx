@@ -1,18 +1,22 @@
 import React from 'react';
 
-import { Container } from './styles';
+import { Container, ImageContainer } from './styles';
 
 interface IProps {
   image: {
     src: string;
     alt: string;
   };
+  imageOverlay?: React.ReactNode;
 }
 
-const Card: React.FC<IProps> = ({ image, children }) => {
+const Card: React.FC<IProps> = ({ image, imageOverlay, children }) => {
   return (
     <Container>
-      <img src={image.src} alt={image.alt} />
+      <ImageContainer>
+        <img src={image.src} alt={image.alt} />
+        {imageOverlay}
+      </ImageContainer>
 
       {children}
     </Container>

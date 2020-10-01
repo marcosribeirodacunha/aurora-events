@@ -18,10 +18,10 @@ const EventCreate: React.FC = () => {
         <Input id="title" name="title" />
 
         <label htmlFor="description">Description</label>
-        <Input id="description" name="description" />
+        <Textarea id="description" name="description" />
 
         <label htmlFor="location">Location</label>
-        <Textarea id="location" name="location" />
+        <Input id="location" name="location" />
 
         <label htmlFor="photo">Photo</label>
         <Dropzone

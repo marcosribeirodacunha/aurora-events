@@ -1,5 +1,5 @@
 import React from 'react';
-import { BiEditAlt } from 'react-icons/bi';
+import { BiPencil } from 'react-icons/bi';
 import Navbar from '../../components/Navbar';
 
 import { Container, Avatar } from './styles';
@@ -15,7 +15,7 @@ const Profile: React.FC = () => {
             alt="John Doe"
           />
           <button type="button">
-            <BiEditAlt size={40} />
+            <BiPencil size={40} />
           </button>
         </Avatar>
 
