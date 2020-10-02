@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Modal, { IModalHandles } from '../../../components/Modal';
-import Button from '../../../components/Button';
-import Dropzone from '../../../components/Dropzone';
+import Modal, { IModalHandles } from '..';
+import Button from '../../Button';
+import Dropzone from '../../Dropzone';
 
 import { Content } from './styles';
 

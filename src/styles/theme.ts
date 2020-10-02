@@ -7,6 +7,7 @@ export default {
     card: '#010a35',
     text: '#ffffff',
     textSecondary: '#aeaeae',
+    error: '#FF3333',
   },
 
   font: {

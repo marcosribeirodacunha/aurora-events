@@ -16,8 +16,8 @@ const routes: React.FC = () => {
         <Redirect exact from="/" to="/sign-in" />
         <Redirect from="/sign-out" to="sign-in" />
 
-        <Route path="/sign-in" component={SignIn} />
         <Route path="/sign-up" component={SignUp} />
+        <Route path="/sign-in" component={SignIn} />
         <Route path="/discover" exact component={Discover} />
         <Route path="/discover/:id" component={EventDetails} />
         <Route path="/profile" component={Profile} />

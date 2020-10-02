@@ -1,11 +1,35 @@
 import styled, { css } from 'styled-components';
 
-interface IProps {
+interface IInputWrapperProps {
   isFocused: boolean;
   isFilled: boolean;
+  hasError: boolean;
 }
 
-export const Container = styled.div<IProps>`
+export const Container = styled.div`
+  label,
+  span {
+    display: block;
+    text-align: left;
+  }
+
+  label {
+    margin-bottom: 6px;
+  }
+
+  span {
+    font-size: ${props => props.theme.font.small};
+    color: ${props => props.theme.colors.error};
+
+    margin-top: 6px;
+  }
+
+  & + div {
+    margin-top: 16px;
+  }
+`;
+
+export const InputWrapper = styled.div<IInputWrapperProps>`
   background: ${props => props.theme.colors.card};
   color: ${props => props.theme.colors.textSecondary};
   border: 2px solid ${props => props.theme.colors.card};
@@ -31,9 +55,12 @@ export const Container = styled.div<IProps>`
       color: ${props.theme.colors.primary};
     `}
 
-  & + div {
-    margin-top: 16px;
-  }
+  ${props =>
+    props.hasError &&
+    css`
+      color: ${props.theme.colors.error};
+      border-color: ${props.theme.colors.error};
+    `}
 
   input {
     flex: 1;

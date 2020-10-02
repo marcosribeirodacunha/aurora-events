@@ -10,6 +10,7 @@ declare module 'styled-components' {
       card: string;
       text: string;
       textSecondary: string;
+      error: string;
     };
 
     font: {
