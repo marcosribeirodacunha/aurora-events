@@ -37,6 +37,11 @@ export const Content = styled.div`
   }
 `;
 
+export const APIErrorMessage = styled.div`
+  margin-bottom: 12px;
+  color: ${props => props.theme.colors.error};
+`;
+
 export const Background = styled.div`
   flex: 1;
   background: url(${signInBackground}) no-repeat center;

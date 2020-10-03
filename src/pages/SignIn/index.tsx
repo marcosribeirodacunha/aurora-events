@@ -1,18 +1,19 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { Form } from '@unform/web';
 import { SubmitHandler, FormHandles, UnformErrors } from '@unform/core';
 import * as Yup from 'yup';
 
 import { BiLogIn } from 'react-icons/bi';
 import { MdMailOutline, MdLockOutline } from 'react-icons/md';
-// import { useHistory } from 'react-router-dom';
+
+import useAuth from '../../hooks/useAuth';
 
 import logo from '../../assets/logo.svg';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import Link from '../../components/Link';
 
-import { Container, Content, Background } from './styles';
+import { Container, Content, APIErrorMessage, Background } from './styles';
 
 interface IFormData {
   email: string;
@@ -20,45 +21,62 @@ interface IFormData {
 }
 
 const SignIn: React.FC = () => {
+  const [apiError, setApiError] = useState('');
+
   const formRef = useRef<FormHandles>(null);
-  // const history = useHistory();
+  const { signIn } = useAuth();
 
-  const handleSubmit: SubmitHandler<IFormData> = useCallback(async data => {
-    try {
-      const stupidTSError = formRef.current?.setErrors({});
+  const handleSubmit: SubmitHandler<IFormData> = useCallback(
+    async data => {
+      try {
+        /*
+        Typescript does not allow just call setErrors function
+        without any assingment even if this function return void
 
-      const schema = Yup.object().shape({
-        email: Yup.string().email().required(),
-        password: Yup.string().min(6).required(),
-      });
+        NOTE: I don't know what to do to solve this problem...
+      */
+        const stupidTSError = formRef.current?.setErrors({});
 
-      await schema.validate(data, { abortEarly: false });
-
-      console.log(data);
-    } catch (err) {
-      const validationErrors: UnformErrors = {};
-
-      if (err instanceof Yup.ValidationError) {
-        err.inner.forEach(error => {
-          validationErrors[error.path] = error.message;
+        const schema = Yup.object().shape({
+          email: Yup.string().email().required(),
+          password: Yup.string().min(6).required(),
         });
 
-        const stupidTSError2 = formRef.current?.setErrors(validationErrors);
-      }
-    }
+        await schema.validate(data, { abortEarly: false });
 
-    // history.push('/discover');
-  }, []);
+        await signIn(data);
+      } catch (err) {
+        const validationErrors: UnformErrors = {};
+
+        if (err instanceof Yup.ValidationError) {
+          err.inner.forEach(error => {
+            validationErrors[error.path] = error.message;
+          });
+
+          const stupidTSError2 = formRef.current?.setErrors(validationErrors);
+        }
+
+        if (err.status) setApiError(err.error);
+      }
+    },
+    [signIn]
+  );
 
   return (
     <Container>
       <Content>
         <img src={logo} alt="Aurora Events" />
 
-        <Form ref={formRef} onSubmit={handleSubmit}>
+        <Form
+          ref={formRef}
+          onSubmit={handleSubmit}
+          initialData={{ email: 'email@email.com', password: '1234567' }}
+        >
           <h1>
             Welcome back. <span>Sign In</span>
           </h1>
+
+          <APIErrorMessage>{apiError}</APIErrorMessage>
 
           <Input icon={MdMailOutline} name="email" placeholder="E-mail" />
           <Input

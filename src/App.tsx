@@ -1,13 +1,18 @@
 import React from 'react';
+
 import { ThemeProvider } from 'styled-components';
-import Routes from './routes';
 import GlobalStyles from './styles/globals';
 import theme from './styles/theme';
 
-const App = () => (
+import { AuthProvider } from './contexts/Auth';
+import Routes from './routes';
+
+const App: React.FC = () => (
   <ThemeProvider theme={theme}>
-    <Routes />
-    <GlobalStyles />
+    <AuthProvider>
+      <Routes />
+      <GlobalStyles />
+    </AuthProvider>
   </ThemeProvider>
 );
 
