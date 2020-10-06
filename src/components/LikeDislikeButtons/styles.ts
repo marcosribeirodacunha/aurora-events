@@ -12,7 +12,7 @@ export const Container = styled.button<IProps>`
   display: inline-flex;
   align-items: center;
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: color 0.1s ease;
 
   svg {
     margin-right: 6px;
@@ -38,5 +38,6 @@ export const Container = styled.button<IProps>`
     props.disableUserInteraction &&
     css`
       pointer-events: none;
+      color: ${props => props.theme.colors.text};
     `};
 `;

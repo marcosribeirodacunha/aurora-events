@@ -46,7 +46,8 @@
         "controlComponents": ["Input"],
         "depth": 2
       }
-    ]
+    ],
+    "camelcase": "off"
   },
   "settings": {
     "import/resolver": {
