@@ -61,4 +61,8 @@ export const Content = styled.div`
       border-radius: 50%;
     }
   }
+
+  > button {
+    margin-top: 0;
+  }
 `;

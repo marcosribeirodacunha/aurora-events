@@ -1,12 +1,22 @@
 import React from 'react';
+import { NavLink, useHistory } from 'react-router-dom';
 
-import { NavLink } from 'react-router-dom';
+import useAuth from '../../hooks/useAuth';
 
+import Button from '../Button';
 import logo from '../../assets/logo.svg';
 
 import { Container, Content } from './styles';
 
 const Navbar: React.FC = () => {
+  const { signed, user, signOut } = useAuth();
+
+  const history = useHistory();
+
+  function handleNavigateToSignIn() {
+    history.push('/signin');
+  }
+
   return (
     <Container>
       <Content>
@@ -14,18 +24,29 @@ const Navbar: React.FC = () => {
 
         <nav>
           <NavLink to="/discover">Discover</NavLink>
-          <NavLink to="/my-events">My events</NavLink>
-          <NavLink to="/profile">Profile</NavLink>
-          <NavLink to="/sign-out">Sign Out</NavLink>
+          {signed && (
+            <>
+              <NavLink to="/myevents">My events</NavLink>
+              <NavLink to="/profile">Profile</NavLink>
+              <NavLink to="/signout" onClick={signOut}>
+                Sign Out
+              </NavLink>
+            </>
+          )}
         </nav>
 
-        <div>
-          <p>John Doe</p>
-          <img
-            src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=635&q=80"
-            alt="John Doe"
-          />
-        </div>
+        {signed ? (
+          <>
+            <div>
+              <p>{user?.name}</p>
+              <img src={user?.avatar} alt="User avatar" />
+            </div>
+          </>
+        ) : (
+          <Button size="sm" variant="primary" onClick={handleNavigateToSignIn}>
+            Sign In
+          </Button>
+        )}
       </Content>
     </Container>
   );

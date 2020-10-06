@@ -23,7 +23,7 @@ const RouteWrapper: React.FC<IProps> = ({
 }) => {
   const { signed } = useAuth();
 
-  if (!signed && isPrivate) return <Redirect to="/sign-in" />;
+  if (!signed && isPrivate) return <Redirect to="/signin" />;
 
   if (signed && isAuth) return <Redirect to="/discover" />;
 

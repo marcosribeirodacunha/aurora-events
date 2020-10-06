@@ -21,17 +21,17 @@ const Routes: React.FC = () => {
     <BrowserRouter>
       <Switch>
         <Redirect exact from="/" to="/discover" />
-        <Redirect from="/sign-out" to="sign-in" />
+        <Redirect from="/signout" to="/signin" />
 
-        <Route path="/sign-up" component={SignUp} isAuth />
-        <Route path="/sign-in" component={SignIn} isAuth />
+        <Route path="/signup" component={SignUp} isAuth />
+        <Route path="/signin" component={SignIn} isAuth />
 
         <Route path="/discover" exact component={Discover} />
         <Route path="/discover/:id" component={EventDetails} />
 
         <Route path="/profile" component={Profile} isPrivate />
-        <Route path="/my-events" exact component={MyEvents} isPrivate />
-        <Route path="/my-events/create" component={EventCreate} isPrivate />
+        <Route path="/myevents" exact component={MyEvents} isPrivate />
+        <Route path="/myevents/create" component={EventCreate} isPrivate />
       </Switch>
     </BrowserRouter>
   );

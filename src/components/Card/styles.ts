@@ -14,6 +14,7 @@ export const ImageContainer = styled.div`
 
   img {
     width: 100%;
+    height: 160px;
     object-fit: cover;
     border-radius: ${props => props.theme.radius};
   }

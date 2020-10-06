@@ -53,6 +53,7 @@ const SignIn: React.FC = () => {
             validationErrors[error.path] = error.message;
           });
 
+          setApiError('');
           const stupidTSError2 = formRef.current?.setErrors(validationErrors);
         }
 
@@ -67,11 +68,7 @@ const SignIn: React.FC = () => {
       <Content>
         <img src={logo} alt="Aurora Events" />
 
-        <Form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          initialData={{ email: 'email@email.com', password: '1234567' }}
-        >
+        <Form ref={formRef} onSubmit={handleSubmit}>
           <h1>
             Welcome back. <span>Sign In</span>
           </h1>
@@ -93,7 +90,7 @@ const SignIn: React.FC = () => {
           <Link to="forgot">Forgot your password?</Link>
         </Form>
 
-        <Link to="sign-up" variant="secondary" icon={BiLogIn}>
+        <Link to="signup" variant="secondary" icon={BiLogIn}>
           Sign Up
         </Link>
       </Content>
