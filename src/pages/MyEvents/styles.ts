@@ -19,6 +19,11 @@ export const CardContainer = styled.section`
   margin-bottom: 100px;
 `;
 
+export const NoDataMessage = styled.h1`
+  font-size: ${props => props.theme.font.title1};
+  color: ${props => props.theme.colors.secondary};
+`;
+
 export const ImageOverlayButton = styled.button.attrs({
   type: 'button',
 })`

@@ -20,6 +20,7 @@ import UpdateModal from '../../components/Modal/UpdateModal';
 import {
   Container,
   CardContainer,
+  NoDataMessage,
   ImageOverlayButton,
   CardContent,
 } from './styles';
@@ -65,58 +66,63 @@ const MyEvents: React.FC = () => {
       <Navbar />
       <Container>
         <Button onClick={handleNavigateToCreate}>New event</Button>
-        <CardContainer>
-          {events.map(event => (
-            <Card
-              key={event.id}
-              image={{
-                src: event.photo,
-                alt: event.title,
-              }}
-              imageOverlay={
-                // eslint-disable-next-line react/jsx-wrap-multilines
-                <ImageOverlayButton
-                  onClick={() => handleOpenModal(photoModalRef)}
-                >
-                  <BiPencil size={40} />
-                </ImageOverlayButton>
-              }
-            >
-              <CardContent>
-                <h1>{event.title}</h1>
+        {events.length === 0 ? (
+          // eslint-disable-next-line react/no-unescaped-entities
+          <NoDataMessage>You haven't organized any events yet.</NoDataMessage>
+        ) : (
+          <CardContainer>
+            {events.map(event => (
+              <Card
+                key={event.id}
+                image={{
+                  src: event.photo,
+                  alt: event.title,
+                }}
+                imageOverlay={
+                  // eslint-disable-next-line react/jsx-wrap-multilines
+                  <ImageOverlayButton
+                    onClick={() => handleOpenModal(photoModalRef)}
+                  >
+                    <BiPencil size={40} />
+                  </ImageOverlayButton>
+                }
+              >
+                <CardContent>
+                  <h1>{event.title}</h1>
 
-                <LikeDislikeButtons
-                  data={{
-                    event_id: event.id,
-                    likes: event.likes,
-                    dislikes: event.dislikes,
-                  }}
-                  disableUserInteraction
-                />
+                  <LikeDislikeButtons
+                    data={{
+                      event_id: event.id,
+                      likes: event.likes,
+                      dislikes: event.dislikes,
+                    }}
+                    disableUserInteraction
+                  />
 
-                <div>
-                  <Link to={`/discover/${event.id}`}>Details</Link>
+                  <div>
+                    <Link to={`/discover/${event.id}`}>Details</Link>
 
-                  <span>
-                    <Button
-                      fab
-                      icon={BiPencil}
-                      variant="primary-ghost"
-                      onClick={() => handleOpenModal(updateModalRef)}
-                    />
+                    <span>
+                      <Button
+                        fab
+                        icon={BiPencil}
+                        variant="primary-ghost"
+                        onClick={() => handleOpenModal(updateModalRef)}
+                      />
 
-                    <Button
-                      fab
-                      icon={BiTrashAlt}
-                      variant="inverse-ghost"
-                      onClick={() => handleOpenModal(deleteModalRef)}
-                    />
-                  </span>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </CardContainer>
+                      <Button
+                        fab
+                        icon={BiTrashAlt}
+                        variant="inverse-ghost"
+                        onClick={() => handleOpenModal(deleteModalRef)}
+                      />
+                    </span>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </CardContainer>
+        )}
       </Container>
       <PhotoModal modalRef={photoModalRef} />
       <UpdateModal modalRef={updateModalRef} />
