@@ -1,6 +1,11 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { BiPencil, BiTrashAlt } from 'react-icons/bi';
+
+import api from '../../services/api';
+import IEvent from '../../interfaces/event';
+
+import useAuth from '../../hooks/useAuth';
 
 import Navbar from '../../components/Navbar';
 import Button from '../../components/Button';
@@ -20,14 +25,34 @@ import {
 } from './styles';
 
 const MyEvents: React.FC = () => {
+  const [events, setEvents] = useState<IEvent[]>([]);
+
   const history = useHistory();
+  const { user } = useAuth();
 
   const photoModalRef = useRef<IModalHandles>(null);
   const updateModalRef = useRef<IModalHandles>(null);
   const deleteModalRef = useRef<IModalHandles>(null);
 
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const { data } = await api.get<IEvent[]>(
+          `events?organizer=${user?.id}`
+        );
+
+        setEvents(data);
+      } catch (error) {
+        if (error.response && error.response.data.status)
+          console.log(error.response.data);
+        else console.log(error);
+      }
+    }
+    loadData();
+  }, []);
+
   function handleNavigateToCreate() {
-    history.push('/my-events/create');
+    history.push('/myevents/create');
   }
 
   const handleOpenModal = useCallback(
@@ -41,13 +66,12 @@ const MyEvents: React.FC = () => {
       <Container>
         <Button onClick={handleNavigateToCreate}>New event</Button>
         <CardContainer>
-          {Array.from(Array(3).keys()).map(index => (
+          {events.map(event => (
             <Card
-              key={index}
+              key={event.id}
               image={{
-                src:
-                  'https://railsware.com/blog/wp-content/uploads/2019/07/Why-we-use-ReactJS-for-our-projects-facebook.png',
-                alt: 'ReactJS',
+                src: event.photo,
+                alt: event.title,
               }}
               imageOverlay={
                 // eslint-disable-next-line react/jsx-wrap-multilines
@@ -59,12 +83,19 @@ const MyEvents: React.FC = () => {
               }
             >
               <CardContent>
-                <h1>ReactJS Conference</h1>
+                <h1>{event.title}</h1>
 
-                <LikeDislikeButtons disableUserInteraction />
+                <LikeDislikeButtons
+                  data={{
+                    event_id: event.id,
+                    likes: event.likes,
+                    dislikes: event.dislikes,
+                  }}
+                  disableUserInteraction
+                />
 
                 <div>
-                  <Link to={`/discover/${index}`}>Details</Link>
+                  <Link to={`/discover/${event.id}`}>Details</Link>
 
                   <span>
                     <Button

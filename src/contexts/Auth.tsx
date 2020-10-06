@@ -2,6 +2,7 @@ import React, { createContext, useEffect, useState } from 'react';
 import api from '../services/api';
 
 interface IUser {
+  id: string;
   name: string;
   avatar: string;
 }
@@ -20,6 +21,7 @@ interface IAuthContextData {
 }
 
 interface IResponseData {
+  id: string;
   user: IUser;
   token: string;
 }
@@ -47,6 +49,7 @@ const AuthProvider: React.FC = ({ children }) => {
       const { data } = await api.post<IResponseData>('sessions', signInData);
 
       const userData = {
+        id: data.user.id,
         name: data.user.name,
         avatar: data.user.avatar,
       };

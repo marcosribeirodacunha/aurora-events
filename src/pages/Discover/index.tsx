@@ -1,14 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
+
+import useAuth from '../../hooks/useAuth';
+import api from '../../services/api';
+import IEvent from '../../interfaces/event';
+
 import Button from '../../components/Button';
 import LikeDislikeButtons from '../../components/LikeDislikeButtons';
 import Card from '../../components/Card';
-
 import Navbar from '../../components/Navbar';
+
 import { Container, CardContent } from './styles';
 
 const Discover: React.FC = () => {
+  const [events, setEvents] = useState<IEvent[]>([]);
+  const { signed, user } = useAuth();
+
   const history = useHistory();
+
+  useEffect(() => {
+    async function loadEvents() {
+      try {
+        const { data } = await api.get<IEvent[]>('/events');
+        setEvents(data);
+      } catch (error) {
+        if (error.response && error.response.data.status)
+          console.log(error.response.data);
+        else console.log(error);
+      }
+    }
+
+    loadEvents();
+  }, []);
 
   function handleNavigateToDetails(id: string | number) {
     history.push(`/discover/${id}`);
@@ -18,24 +41,32 @@ const Discover: React.FC = () => {
     <>
       <Navbar />
       <Container>
-        {Array.from(Array(5).keys()).map(index => (
+        {events.map(event => (
           <Card
+            key={event.id}
             image={{
-              src:
-                'https://railsware.com/blog/wp-content/uploads/2019/07/Why-we-use-ReactJS-for-our-projects-facebook.png',
-              alt: 'ReactJS',
+              src: event.photo,
+              alt: event.title,
             }}
-            key={index}
           >
             <CardContent>
-              <h1>ReactJS Conference</h1>
+              <h1>{event.title}</h1>
               <p>
-                Organized by <span>John Doe</span>
+                Organized by <span>{event.organizer_name}</span>
               </p>
 
-              <LikeDislikeButtons />
+              <LikeDislikeButtons
+                data={{
+                  event_id: event.id,
+                  likes: event.likes,
+                  dislikes: event.dislikes,
+                }}
+                disableUserInteraction={
+                  !signed || user?.id === event.organizer_id
+                }
+              />
 
-              <Button block onClick={() => handleNavigateToDetails(index)}>
+              <Button block onClick={() => handleNavigateToDetails(event.id)}>
                 Know more
               </Button>
             </CardContent>
