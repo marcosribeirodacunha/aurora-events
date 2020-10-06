@@ -10,11 +10,15 @@ export const Container = styled.div`
 export const Content = styled.div`
   width: 100%;
   max-width: 700px;
-  margin: 0 20px;
+  height: 100%;
+  max-height: min(100%, 900px);
   display: flex;
   flex-direction: column;
-  place-content: center;
   align-items: center;
+  justify-content: space-between;
+  align-content: center;
+  padding: 40px;
+  margin: auto;
 
   h1 {
     font-size: ${props => props.theme.font.title2};
@@ -29,8 +33,13 @@ export const Content = styled.div`
     width: 100%;
     max-width: 350px;
     text-align: center;
-    margin: 96px 0;
+    margin: 32px 0;
   }
+`;
+
+export const APIErrorMessage = styled.div`
+  margin-bottom: 12px;
+  color: ${props => props.theme.colors.error};
 `;
 
 export const Background = styled.div`

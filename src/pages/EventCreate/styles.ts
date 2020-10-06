@@ -12,18 +12,13 @@ export const Container = styled.div`
     margin-bottom: 20px;
   }
 
-  label {
-    display: block;
-    margin-bottom: 6px;
-  }
-
-  label + div:not(:last-of-type),
-  label + textarea {
-    margin-bottom: 20px;
-  }
-
   button {
     display: block;
     margin-left: auto;
   }
+`;
+
+export const APIErrorMessage = styled.div`
+  margin-bottom: 12px;
+  color: ${props => props.theme.colors.error};
 `;
