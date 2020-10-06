@@ -17,6 +17,10 @@ export const Container = styled.div`
       margin: 20px 0;
     }
 
+    > p {
+      white-space: pre-wrap;
+    }
+
     > div.location {
       display: flex;
       align-items: center;

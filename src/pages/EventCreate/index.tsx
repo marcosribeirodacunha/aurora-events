@@ -73,15 +73,7 @@ const EventCreate: React.FC = () => {
     <>
       <Navbar />
       <Container>
-        <Form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          initialData={{
-            title: 'MacOS Catalina Event',
-            description: 'Apple event',
-            location: 'United States of America',
-          }}
-        >
+        <Form ref={formRef} onSubmit={handleSubmit}>
           <h1>Organize a new event</h1>
 
           <APIErrorMessage>{apiError}</APIErrorMessage>
