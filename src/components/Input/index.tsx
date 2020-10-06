@@ -23,9 +23,9 @@ const Input: React.FC<IProps> = ({
   icon: Icon,
   ...rest
 }) => {
-  const inputRef = useRef<HTMLInputElement>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [isFilled, setIsFilled] = useState(false);
+  const ref = useRef<HTMLInputElement>(null);
 
   const {
     fieldName,
@@ -38,7 +38,7 @@ const Input: React.FC<IProps> = ({
   useEffect(() => {
     registerField({
       name: fieldName,
-      ref: inputRef.current,
+      ref: ref.current,
       path: 'value',
     });
   }, [fieldName, registerField]);
@@ -50,7 +50,7 @@ const Input: React.FC<IProps> = ({
 
   const handleInputBlur = useCallback(() => {
     setIsFocused(false);
-    setIsFilled(!!inputRef.current?.value);
+    setIsFilled(!!ref.current?.value);
   }, []);
 
   return (
@@ -64,11 +64,12 @@ const Input: React.FC<IProps> = ({
       >
         {Icon && <Icon size={20} />}
         <input
-          ref={inputRef}
+          ref={ref}
           onFocus={handleInputFocus}
           onBlur={handleInputBlur}
           defaultValue={defaultValue}
           type={type}
+          id={fieldName}
           {...rest}
         />
       </InputWrapper>

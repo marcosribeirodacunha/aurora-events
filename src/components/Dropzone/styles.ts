@@ -1,6 +1,34 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+
+interface IDropzoneProps {
+  isFocused: boolean;
+  hasError: boolean;
+}
 
 export const Container = styled.div`
+  label,
+  span {
+    display: block;
+    text-align: left;
+  }
+
+  label {
+    margin-bottom: 6px;
+  }
+
+  span {
+    font-size: ${props => props.theme.font.small};
+    color: ${props => props.theme.colors.error};
+
+    margin-top: 6px;
+  }
+
+  & + div {
+    margin-top: 16px;
+  }
+`;
+
+export const DropzoneContainer = styled.div<IDropzoneProps>`
   background: ${props => props.theme.colors.card};
   border-radius: ${props => props.theme.radius};
   height: 250px;
@@ -13,9 +41,17 @@ export const Container = styled.div`
   align-items: center;
   cursor: pointer;
 
-  &:focus {
-    border-color: ${props => props.theme.colors.primary};
-  }
+  ${props =>
+    props.isFocused &&
+    css`
+      border-color: ${props.theme.colors.primary};
+    `}
+
+  ${props =>
+    props.hasError &&
+    css`
+      border-color: ${props.theme.colors.error};
+    `}
 
   img {
     width: 100%;

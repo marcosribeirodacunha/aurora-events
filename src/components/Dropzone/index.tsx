@@ -1,58 +1,84 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { useField } from '@unform/core';
 import { BiUpload } from 'react-icons/bi';
 
-import { Container } from './styles';
+import { Container, DropzoneContainer } from './styles';
 
 interface IProps {
-  onFileUploaded: (file: File) => void;
-  id?: string;
-  name?: string;
+  name: string;
+  label?: string;
 }
 
-const Dropzone: React.FC<IProps> = ({ onFileUploaded, id, name }) => {
+const Dropzone: React.FC<IProps> = ({ name, label }) => {
+  const [isFocused, setIsFocused] = useState(false);
   const [selectedFileURL, setSelectedFileURL] = useState('');
 
-  const onDrop = useCallback(
-    acceptedFiles => {
-      const file = acceptedFiles[0];
+  const { fieldName, registerField, error, clearError } = useField(name);
 
-      const fileURL = URL.createObjectURL(file);
+  const onDrop = useCallback(acceptedFiles => {
+    const file = acceptedFiles[0];
+    const fileURL = URL.createObjectURL(file);
+    setSelectedFileURL(fileURL);
+  }, []);
 
-      setSelectedFileURL(fileURL);
-      onFileUploaded(file);
-    },
-    [onFileUploaded]
-  );
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps, isDragActive, inputRef } = useDropzone({
     onDrop,
     accept: 'image/*',
   });
 
-  return (
-    <Container {...getRootProps()}>
-      <input
-        {...getInputProps({
-          name,
-          id,
-        })}
-        accept="image/*"
-      />
+  useEffect(() => {
+    registerField({
+      name: fieldName,
+      ref: inputRef.current,
+      path: 'files[0]',
+    });
+  }, [fieldName, registerField, inputRef]);
 
-      {selectedFileURL ? (
-        <img src={selectedFileURL} alt="Event" />
-      ) : isDragActive ? (
-        <p>
-          <BiUpload size={40} />
-          Drop the image here...
-        </p>
-      ) : (
-        <p>
-          <BiUpload size={40} />
-          Drag and drop the image here, or click to select a image
-        </p>
-      )}
+  const handleDropzoneFocus = useCallback(() => {
+    clearError();
+    setIsFocused(true);
+  }, [clearError]);
+
+  const handleDropzoneBlur = useCallback(() => {
+    setIsFocused(false);
+  }, []);
+
+  return (
+    <Container>
+      {label && <label htmlFor={fieldName}>{label}</label>}
+
+      <DropzoneContainer
+        {...getRootProps()}
+        isFocused={isFocused}
+        hasError={!!error}
+        onFocus={handleDropzoneFocus}
+        onBlur={handleDropzoneBlur}
+      >
+        <input
+          {...getInputProps({
+            name,
+            id: fieldName,
+          })}
+          accept="image/*"
+        />
+
+        {selectedFileURL ? (
+          <img src={selectedFileURL} alt="Event" />
+        ) : isDragActive ? (
+          <p>
+            <BiUpload size={40} />
+            Drop the image here...
+          </p>
+        ) : (
+          <p>
+            <BiUpload size={40} />
+            Drag and drop the image here, or click to select a image
+          </p>
+        )}
+      </DropzoneContainer>
+
+      {error && <span>{error}</span>}
     </Container>
   );
 };

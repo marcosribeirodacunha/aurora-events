@@ -65,12 +65,19 @@ export const InputWrapper = styled.div<IInputWrapperProps>`
   input {
     flex: 1;
     background: transparent;
-    padding: 16px 0;
+    padding: 11px 0;
     border: 0;
     color: ${props => props.theme.colors.text};
 
     &::placeholder {
       color: ${props => props.theme.colors.textSecondary};
+    }
+
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus {
+      box-shadow: 0 0 0 100px ${props => props.theme.colors.card} inset;
+      -webkit-text-fill-color: ${props => props.theme.colors.text};
     }
   }
 
