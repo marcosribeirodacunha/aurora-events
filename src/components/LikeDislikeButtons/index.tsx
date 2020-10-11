@@ -70,12 +70,9 @@ const LikeDislikeButtons: React.FC<IProps> = ({
 
     try {
       if (likeStatus === LikeStatus.NONE) {
-        await api.post('events/like', {
-          event_id: data.event_id,
-          is_like,
-        });
+        await api.post(`events/like/${data.event_id}`, { is_like });
       } else {
-        await api.patch(`/events/like/${data.event_id}`, { is_like });
+        await api.patch(`events/like/${data.event_id}`, { is_like });
       }
     } catch (error) {
       if (error.response && error.response.data.status)

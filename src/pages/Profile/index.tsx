@@ -8,12 +8,17 @@ import Navbar from '../../components/Navbar';
 import { Container, Avatar } from './styles';
 
 interface IUser {
-  id: string;
-  name: string;
-  email: string;
-  avatar: string;
-  created_at: string;
-  updated_at: string;
+  user_id: string;
+  user_name: string;
+  user_email: string;
+  user_avatar: string;
+  user_created_at: string;
+  user_updated_at: string;
+  event_count: string;
+  my_likes_count: string;
+  my_dislikes_count: string;
+  likes_received_count: string;
+  dislikes_received_count: string;
 }
 
 const Profile: React.FC = () => {
@@ -34,25 +39,43 @@ const Profile: React.FC = () => {
     }
 
     loadData();
-  }, []);
+  }, [signedUser]);
 
   return (
     <>
       <Navbar />
       <Container>
         <Avatar>
-          <img src={user.avatar} alt="User avatar" />
+          <img src={user.user_avatar} alt="User avatar" />
           <button type="button">
             <BiPencil size={40} />
           </button>
         </Avatar>
 
-        <h1>{user.name}</h1>
-        <p>{user.email}</p>
+        <h1>{user.user_name}</h1>
+        <p>{user.user_email}</p>
 
-        <p>3 events organized</p>
-        <p>45 likes</p>
-        <p>3 dislikes</p>
+        <p>
+          {user.event_count} {user.event_count === '1' ? 'event' : 'events'}{' '}
+          organized
+        </p>
+        <p>
+          {user.likes_received_count}{' '}
+          {user.likes_received_count === '1' ? 'like' : 'likes'} received
+        </p>
+        <p>
+          {user.dislikes_received_count}{' '}
+          {user.dislikes_received_count === '1' ? 'dislike' : 'dislikes'}{' '}
+          received
+        </p>
+        <p>
+          {user.my_likes_count}{' '}
+          {user.my_likes_count === '1' ? 'event' : 'events'} you liked
+        </p>
+        <p>
+          {user.my_dislikes_count}{' '}
+          {user.my_dislikes_count === '1' ? 'event' : 'events'} you disliked
+        </p>
       </Container>
     </>
   );
