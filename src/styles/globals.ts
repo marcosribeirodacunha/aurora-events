@@ -1,3 +1,4 @@
+import { shade } from 'polished';
 import { createGlobalStyle } from 'styled-components';
 
 export default createGlobalStyle`
@@ -5,7 +6,6 @@ export default createGlobalStyle`
   :root {
     font-size: 16px;
   }
-
 
   * {
     margin: 0;
@@ -37,5 +37,22 @@ export default createGlobalStyle`
     font-weight: 600;
     line-height: ${props => props.theme.lineHeight.title};
   }
+
+::-webkit-scrollbar {
+  width: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background: ${props => props.theme.colors.card};
+}
+
+::-webkit-scrollbar-thumb {
+  background: ${props => shade(0.3, props.theme.colors.tertiary)};
+  border-radius: 4px
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: ${props => props.theme.colors.tertiary};
+}
 
 `;

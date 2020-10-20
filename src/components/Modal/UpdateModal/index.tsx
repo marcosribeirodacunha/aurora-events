@@ -2,14 +2,16 @@ import React, { useCallback, useRef } from 'react';
 import { FormHandles, SubmitHandler, UnformErrors } from '@unform/core';
 import * as Yup from 'yup';
 
+import IEvent from '../../../interfaces/event';
 import Modal, { IModalHandles } from '..';
 import Button from '../../Button';
 import Input from '../../Input';
 import Textarea from '../../Textarea';
 
 import { Form } from './styles';
+import api from '../../../services/api';
 
-interface IFormData {
+export interface IFormData {
   title: string;
   description: string;
   location: string;
@@ -17,14 +19,20 @@ interface IFormData {
 
 interface IProps {
   modalRef: React.RefObject<IModalHandles>;
-  data?: IFormData;
+  event: IFormData & { id: string };
+  onUpdateSuccess: (updatedEvent: string, updatedFields: IFormData) => void;
 }
 
-const UpdateModal: React.FC<IProps> = ({ modalRef }) => {
+const UpdateModal: React.FC<IProps> = ({
+  modalRef,
+  event,
+  onUpdateSuccess,
+}) => {
   const formRef = useRef<FormHandles>(null);
 
-  const handleSubmit: SubmitHandler<IFormData> = useCallback(async data => {
+  const handleSubmit: SubmitHandler<IFormData> = async data => {
     try {
+      console.log(event);
       const stupidTSError = formRef.current?.setErrors({});
 
       const schema = Yup.object().shape({
@@ -35,7 +43,10 @@ const UpdateModal: React.FC<IProps> = ({ modalRef }) => {
 
       await schema.validate(data, { abortEarly: false });
 
-      console.log(data); // #TODO: implement update in backend and frontend
+      await api.patch(`events/${event.id}`, data);
+      onUpdateSuccess(event.id, data);
+
+      const _ = modalRef.current?.closeModal();
     } catch (err) {
       const validationErrors: UnformErrors = {};
 
@@ -47,11 +58,19 @@ const UpdateModal: React.FC<IProps> = ({ modalRef }) => {
         const stupidTSError = formRef.current?.setErrors(validationErrors);
       }
     }
-  }, []);
+  };
 
   return (
     <Modal ref={modalRef} maxWidth={620}>
-      <Form ref={formRef} onSubmit={handleSubmit} initialData={{}}>
+      <Form
+        ref={formRef}
+        onSubmit={handleSubmit}
+        initialData={{
+          title: event?.title,
+          description: event?.description,
+          location: event?.location,
+        }}
+      >
         <h1>Update event info</h1>
 
         <Input label="Title" name="title" />

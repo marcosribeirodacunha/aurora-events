@@ -8,15 +8,27 @@ import { Content } from './styles';
 
 interface IProps {
   modalRef: React.RefObject<IModalHandles>;
+  event: {
+    id: string;
+    title: string;
+  };
+  onDeleteSuccess: (deletedEvent: string) => void;
 }
 
-const DeleteModal: React.FC<IProps> = ({ modalRef }) => {
+const DeleteModal: React.FC<IProps> = ({
+  modalRef,
+  event,
+  onDeleteSuccess,
+}) => {
   const handleDelete = async () => {
     try {
-      // await api.delete(`event/${event_id}`);
+      await api.delete(`events/${event.id}`);
+      onDeleteSuccess(event.id);
       const stupidTSError = modalRef.current?.closeModal();
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.data.status)
+        console.log(error.response.data.message);
+      else console.log(error);
     }
   };
 
@@ -25,7 +37,7 @@ const DeleteModal: React.FC<IProps> = ({ modalRef }) => {
       <Content>
         <h1>Delete event</h1>
         <p>
-          Are you sure you want to delete <span>Music Show</span>?
+          Are you sure you want to delete <span>{event?.title}</span>?
         </p>
 
         <div>

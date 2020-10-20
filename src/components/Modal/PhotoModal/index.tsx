@@ -7,6 +7,7 @@ import Button from '../../Button';
 import Dropzone from '../../Dropzone';
 
 import { Form } from './styles';
+import api from '../../../services/api';
 
 interface IFormData {
   photo: File;
@@ -14,12 +15,21 @@ interface IFormData {
 
 interface IProps {
   modalRef: React.RefObject<IModalHandles>;
+  event: {
+    id: string;
+    photo: string;
+  };
+  onPhotoUpdateSucess: (eventId: string, newPhotoURL: string) => void;
 }
 
-const PhotoModal: React.FC<IProps> = ({ modalRef }) => {
+const PhotoModal: React.FC<IProps> = ({
+  modalRef,
+  event,
+  onPhotoUpdateSucess,
+}) => {
   const formRef = useRef<FormHandles>(null);
 
-  const handleSubmit: SubmitHandler<IFormData> = useCallback(async data => {
+  const handleSubmit: SubmitHandler<IFormData> = async data => {
     try {
       const stupidTSError = formRef.current?.setErrors({});
 
@@ -32,7 +42,8 @@ const PhotoModal: React.FC<IProps> = ({ modalRef }) => {
       const formData = new FormData();
       formData.append('photo', data.photo);
 
-      console.log(data); // #TODO: implement photo update in backend and frontend
+      const response = await api.patch(`events/photo/${event.id}`, formData);
+      onPhotoUpdateSucess(event.id, response.data.photo);
 
       const anotherStupidTSError = modalRef.current?.closeModal();
     } catch (err) {
@@ -46,7 +57,7 @@ const PhotoModal: React.FC<IProps> = ({ modalRef }) => {
         const stupidTSError = formRef.current?.setErrors(validationErrors);
       }
     }
-  }, []);
+  };
 
   return (
     <Modal ref={modalRef} maxWidth={620}>

@@ -15,7 +15,9 @@ import Link from '../../components/Link';
 import { IModalHandles } from '../../components/Modal';
 import DeleteModal from '../../components/Modal/DeleteModal';
 import PhotoModal from '../../components/Modal/PhotoModal';
-import UpdateModal from '../../components/Modal/UpdateModal';
+import UpdateModal, {
+  IFormData as IUpdatedFields,
+} from '../../components/Modal/UpdateModal';
 
 import {
   Container,
@@ -27,6 +29,7 @@ import {
 
 const MyEvents: React.FC = () => {
   const [events, setEvents] = useState<IEvent[]>([]);
+  const [selectedEvent, setSelectedEvent] = useState(-1);
 
   const history = useHistory();
   const { user } = useAuth();
@@ -50,16 +53,44 @@ const MyEvents: React.FC = () => {
       }
     }
     loadData();
-  }, []);
+  }, [user?.id]);
 
   function handleNavigateToCreate() {
     history.push('/myevents/create');
   }
 
   const handleOpenModal = useCallback(
-    (modalRef: React.RefObject<IModalHandles>) => modalRef.current?.openModal(),
+    (modalRef: React.RefObject<IModalHandles>, eventIndex: number) => {
+      setSelectedEvent(eventIndex);
+      return modalRef.current?.openModal();
+    },
     []
   );
+
+  const onDeleteSuccess = (deletedEvent: string) => {
+    const filteredEvents = events.filter(event => event.id !== deletedEvent);
+    setEvents(filteredEvents);
+  };
+
+  const onPhotoUpdateSucess = (eventId: string, newPhotoURL: string) => {
+    const updatedEvents = events.map(event =>
+      event.id !== eventId ? event : { ...event, photo: newPhotoURL }
+    );
+
+    setEvents(updatedEvents);
+  };
+
+  const onUpdateSuccess = (
+    updatedEvent: string,
+    updatedFields: IUpdatedFields
+  ) => {
+    const updatedEvents = events.map(event =>
+      event.id !== updatedEvent ? event : { ...event, ...updatedFields }
+    );
+    setEvents(updatedEvents);
+  };
+
+  if (!events) return <h1>loading...</h1>;
 
   return (
     <>
@@ -71,7 +102,7 @@ const MyEvents: React.FC = () => {
           <NoDataMessage>You haven't organized any events yet.</NoDataMessage>
         ) : (
           <CardContainer>
-            {events.map(event => (
+            {events.map((event, index) => (
               <Card
                 key={event.id}
                 image={{
@@ -81,7 +112,7 @@ const MyEvents: React.FC = () => {
                 imageOverlay={
                   // eslint-disable-next-line react/jsx-wrap-multilines
                   <ImageOverlayButton
-                    onClick={() => handleOpenModal(photoModalRef)}
+                    onClick={() => handleOpenModal(photoModalRef, index)}
                   >
                     <BiPencil size={40} />
                   </ImageOverlayButton>
@@ -107,14 +138,14 @@ const MyEvents: React.FC = () => {
                         fab
                         icon={BiPencil}
                         variant="primary-ghost"
-                        onClick={() => handleOpenModal(updateModalRef)}
+                        onClick={() => handleOpenModal(updateModalRef, index)}
                       />
 
                       <Button
                         fab
                         icon={BiTrashAlt}
                         variant="inverse-ghost"
-                        onClick={() => handleOpenModal(deleteModalRef)}
+                        onClick={() => handleOpenModal(deleteModalRef, index)}
                       />
                     </span>
                   </div>
@@ -124,9 +155,25 @@ const MyEvents: React.FC = () => {
           </CardContainer>
         )}
       </Container>
-      <PhotoModal modalRef={photoModalRef} />
-      <UpdateModal modalRef={updateModalRef} />
-      <DeleteModal modalRef={deleteModalRef} />
+      {events && (
+        <>
+          <PhotoModal
+            modalRef={photoModalRef}
+            event={events[selectedEvent]}
+            onPhotoUpdateSucess={onPhotoUpdateSucess}
+          />
+          <UpdateModal
+            modalRef={updateModalRef}
+            event={events[selectedEvent]}
+            onUpdateSuccess={onUpdateSuccess}
+          />
+          <DeleteModal
+            modalRef={deleteModalRef}
+            event={events[selectedEvent]}
+            onDeleteSuccess={onDeleteSuccess}
+          />
+        </>
+      )}
     </>
   );
 };

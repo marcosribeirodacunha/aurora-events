@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { BiMap, BiPencil, BiTrashAlt } from 'react-icons/bi';
 
 import useAuth from '../../hooks/useAuth';
@@ -12,7 +12,9 @@ import LikeDislikeButtons from '../../components/LikeDislikeButtons';
 import { IModalHandles } from '../../components/Modal';
 import DeleteModal from '../../components/Modal/DeleteModal';
 import PhotoModal from '../../components/Modal/PhotoModal';
-import UpdateModal from '../../components/Modal/UpdateModal';
+import UpdateModal, {
+  IFormData as IUpdatedFields,
+} from '../../components/Modal/UpdateModal';
 
 import { Container, Photo, OrganizerButtons, Organizer } from './styles';
 
@@ -27,6 +29,8 @@ const MyEvents: React.FC = () => {
 
   const params = useParams() as IParams;
   const { signed, user } = useAuth();
+
+  const history = useHistory();
 
   const photoModalRef = useRef<IModalHandles>(null);
   const updateModalRef = useRef<IModalHandles>(null);
@@ -51,6 +55,24 @@ const MyEvents: React.FC = () => {
     (modalRef: React.RefObject<IModalHandles>) => modalRef.current?.openModal(),
     []
   );
+
+  const onDeleteSuccess = (deletedEvent: string) => {
+    history.goBack();
+  };
+
+  const onPhotoUpdateSucess = (eventId: string, newPhotoURL: string) => {
+    setEvent({ ...event, photo: newPhotoURL });
+  };
+
+  const onUpdateSuccess = (
+    updatedEvent: string,
+    updatedFields: IUpdatedFields
+  ) => {
+    setEvent({
+      ...event,
+      ...updatedFields,
+    });
+  };
 
   if (Object.entries(event).length === 0) return <h1>Loading...</h1>;
 
@@ -120,9 +142,21 @@ const MyEvents: React.FC = () => {
           </Organizer>
         </section>
       </Container>
-      <PhotoModal modalRef={photoModalRef} />
-      <UpdateModal modalRef={updateModalRef} />
-      <DeleteModal modalRef={deleteModalRef} />
+      <PhotoModal
+        modalRef={photoModalRef}
+        event={event}
+        onPhotoUpdateSucess={onPhotoUpdateSucess}
+      />
+      <UpdateModal
+        modalRef={updateModalRef}
+        event={event}
+        onUpdateSuccess={onUpdateSuccess}
+      />
+      <DeleteModal
+        modalRef={deleteModalRef}
+        event={event}
+        onDeleteSuccess={onDeleteSuccess}
+      />
     </>
   );
 };

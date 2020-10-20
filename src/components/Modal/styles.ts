@@ -24,7 +24,7 @@ export const Container = styled.div`
   overflow-x: hidden;
   overflow-y: auto;
   z-index: 1000;
-  padding-right: 17px;
+  padding-right: 14px;
   background: ${props => transparentize(0.2, props.theme.colors.card)};
   animation: ${opacityContainer} 0.3s ease;
 `;
