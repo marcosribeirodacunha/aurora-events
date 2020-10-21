@@ -10,22 +10,15 @@ import { Form } from './styles';
 import api from '../../../services/api';
 
 interface IFormData {
-  photo: File;
+  avatar: File;
 }
 
 interface IProps {
   modalRef: React.RefObject<IModalHandles>;
-  event: {
-    id: string;
-  };
-  onPhotoUpdateSucess: (eventId: string, newPhotoURL: string) => void;
+  onAvatarUpdateSucess: (newAvatarURL: string) => void;
 }
 
-const PhotoModal: React.FC<IProps> = ({
-  modalRef,
-  event,
-  onPhotoUpdateSucess,
-}) => {
+const AvatarModal: React.FC<IProps> = ({ modalRef, onAvatarUpdateSucess }) => {
   const formRef = useRef<FormHandles>(null);
 
   const handleSubmit: SubmitHandler<IFormData> = async data => {
@@ -33,16 +26,24 @@ const PhotoModal: React.FC<IProps> = ({
       const stupidTSError = formRef.current?.setErrors({});
 
       const schema = Yup.object().shape({
-        photo: Yup.mixed().required(),
+        avatar: Yup.mixed().required(),
       });
 
       await schema.validate(data, { abortEarly: false });
 
       const formData = new FormData();
-      formData.append('photo', data.photo);
+      formData.append('avatar', data.avatar);
 
-      const response = await api.patch(`events/photo/${event.id}`, formData);
-      onPhotoUpdateSucess(event.id, response.data.photo);
+      const response = await api.patch(`users/avatar`, formData);
+
+      const storageUser = JSON.parse(
+        localStorage.getItem('@AuroraEvents:user')!
+      );
+      localStorage.setItem(
+        '@AuroraEvents:user',
+        JSON.stringify({ ...storageUser, avatar: response.data.avatar })
+      );
+      onAvatarUpdateSucess(response.data.avatar);
 
       const anotherStupidTSError = modalRef.current?.closeModal();
     } catch (err) {
@@ -61,9 +62,9 @@ const PhotoModal: React.FC<IProps> = ({
   return (
     <Modal ref={modalRef} maxWidth={620}>
       <Form ref={formRef} onSubmit={handleSubmit}>
-        <h1>Select the new photo</h1>
+        <h1>Select the new avatar</h1>
 
-        <Dropzone label="Photo" name="photo" />
+        <Dropzone label="Avatar" name="avatar" />
 
         <Button type="submit">Update</Button>
       </Form>
@@ -71,4 +72,4 @@ const PhotoModal: React.FC<IProps> = ({
   );
 };
 
-export default PhotoModal;
+export default AvatarModal;

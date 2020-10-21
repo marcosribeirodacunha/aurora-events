@@ -1,8 +1,7 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useRef } from 'react';
 import { FormHandles, SubmitHandler, UnformErrors } from '@unform/core';
 import * as Yup from 'yup';
 
-import IEvent from '../../../interfaces/event';
 import Modal, { IModalHandles } from '..';
 import Button from '../../Button';
 import Input from '../../Input';

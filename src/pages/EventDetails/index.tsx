@@ -137,7 +137,18 @@ const MyEvents: React.FC = () => {
               <p>
                 Organized by <span>{event.organizer_name}</span>
               </p>
-              <small>16/12/2020 - 12:30h</small>
+              <small>
+                {Intl.DateTimeFormat('pt-BR', {
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric',
+                  hour: 'numeric',
+                  minute: 'numeric',
+                })
+                  .format(new Date(event.updated_at))
+                  .replace(' ', ' - ')}
+              </small>
+              {/* <small>16/12/2020 - 12:30h</small> */}
             </div>
           </Organizer>
         </section>
